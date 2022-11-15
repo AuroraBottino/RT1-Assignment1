@@ -76,11 +76,11 @@ Then, we modify the value of the variable silver, so now we will look for the ot
 
 ![Schermata del 2022-11-13 08-47-13](https://user-images.githubusercontent.com/114871147/201511625-1de98767-81ba-489d-8424-76200c92c692.png)
 
-Then, we look for a golden token that is not already matched with a silver one. If no token is detected, we make the robot turn. If the distance between the robot and the token is less than 1.4 * d_th, it means the robot is close to the golden token not matched yet, so we release the silver token grabbed before with the method release() of the class Robot. If the silver token is released, we get the code corresponding to the that golden token, the list_golden_token will be updated, adding the golden token that is matched with the silver token, so the robot won't consider it anymore. Again, we use the function append() to update our list. 
+Then, we look for a golden token that is not already matched with a silver one. If no token is detected, we make the robot turn. If the distance between the robot and the token is less than 1.5 * d_th, it means the robot is close to the golden token not matched yet, so we release the silver token grabbed before with the method release() of the class Robot. If the silver token is released, we get the code corresponding to the that golden token, the list_golden_token will be updated, adding the golden token that is matched with the silver token, so the robot won't consider it anymore. Again, we use the function append() to update our list. 
 Then, we modify the value of the variable silver, so now we will look for the other type of token. If the angle between the robot and the golden token (-1 if no token is detected) is between -a_th<= rot_y <= a_th, the robot is well aligned with the token and we can go forward.
 Instead, if the angle between the robot and the golden token is rot_y < -a_th and rot_y > a_th, the robot is not well aligned with the token so we move it on the left or on the right. 
 
-![Schermata del 2022-11-13 14-47-53](https://user-images.githubusercontent.com/114871147/201525162-10c21c59-6ac7-4bf5-a390-907a34576f94.png)
+![Schermata del 2022-11-13 07-58-00](https://user-images.githubusercontent.com/114871147/201892610-032bc0bc-02d5-4b39-8e94-78ca4ed646ee.png)
 
 
 When all the tokens are paired, our work is done and we can exit the program. 
