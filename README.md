@@ -1,5 +1,11 @@
 # Research-Track-Assignment1
 
+# Professor
+Carmine Tommaso Recchiuto 
+
+# Student
+Aurora Bottino
+
 #Installing and running 
 The simulator requires a Python 2.7 installation, the pygame library, PyPyBox2D, and PyYAML.
 Once the dependencies are installed, we can simply run the assignment.py script to test out the simulator.
@@ -69,11 +75,13 @@ After, we call the functions find_silver_token() and find_golden_token(), to ret
 ![Schermata del 2022-11-13 07-58-00](https://user-images.githubusercontent.com/114871147/201509884-b485df30-7752-4247-ada5-b372e7c00859.png)
 
 Now, we create the Robot control loop with the fuction 'while' and we start looking for a silver token. 
-If no token is detected, we make the robot turn. If the distance between the robot and the token is less than d_th meters, it means we are close to the token and the robot can grab it, by using the method grab() of the class Robot. If the robot grabs the token,we get the code corresponding to the that silver token, the list_silver_token will be updated, adding the silver token just grabbed, so that this token won't be grabbed by the robot anymore. In order to update the list, Python’s append() function has been used: Python’s append() function inserts a single element into an existing list. Then, we modify the value of the variable silver, so now we will look for the other type of token. Otherwise, the robot should be driven toward the token. Also, if the angle between the robot and the silver token (-1 if no token is detected) is between -a_th<= rot_y <= a_th, the robot is well aligned with the token and we can go forward. Instead, if the angle between the robot and the silver token is rot_y < -a_th or rot_y > a_th, the robot is not well aligned with the token so we move it on the left or on the right.
+If no token is detected, we make the robot turn. If the distance between the robot and the token is less than d_th meters, it means we are close to the token and the robot can grab it, by using the method grab() of the class Robot. If the robot grabs the token,we get the code corresponding to the that silver token, the list_silver_token will be updated, adding the silver token just grabbed, so that this token won't be grabbed by the robot anymore. In order to update the list, Python’s append() function has been used: Python’s append() function inserts a single element into an existing list. 
+Then, we modify the value of the variable silver, so now we will look for the other type of token. Otherwise, the robot should be driven toward the token. Also, if the angle between the robot and the silver token (-1 if no token is detected) is between -a_th<= rot_y <= a_th, the robot is well aligned with the token and we can go forward. Instead, if the angle between the robot and the silver token is rot_y < -a_th or rot_y > a_th, the robot is not well aligned with the token so we move it on the left or on the right.
 
 ![Schermata del 2022-11-13 08-47-13](https://user-images.githubusercontent.com/114871147/201511625-1de98767-81ba-489d-8424-76200c92c692.png)
 
-Then, we look for a golden token that is not already matched with a silver one. If no token is detected, we make the robot turn. If the distance between the robot and the token is less than 1.4 * d_th, it means the robot is close to the golden token not matched yet, so we release the silver token grabbed before with the method release() of the class Robot. If the silver token is released, we get the code corresponding to the that golden token, the list_golden_token will be updated, adding the golden token that is matched with the silver token, so the robot won't consider it anymore. Again, we use the function append() to update our list. Then, we modify the value of the variable silver, so now we will look for the other type of token. If the angle between the robot and the golden token (-1 if no token is detected) is between -a_th<= rot_y <= a_th, the robot is well aligned with the token and we can go forward.
+Then, we look for a golden token that is not already matched with a silver one. If no token is detected, we make the robot turn. If the distance between the robot and the token is less than 1.4 * d_th, it means the robot is close to the golden token not matched yet, so we release the silver token grabbed before with the method release() of the class Robot. If the silver token is released, we get the code corresponding to the that golden token, the list_golden_token will be updated, adding the golden token that is matched with the silver token, so the robot won't consider it anymore. Again, we use the function append() to update our list. 
+Then, we modify the value of the variable silver, so now we will look for the other type of token. If the angle between the robot and the golden token (-1 if no token is detected) is between -a_th<= rot_y <= a_th, the robot is well aligned with the token and we can go forward.
 Instead, if the angle between the robot and the golden token is rot_y < -a_th and rot_y > a_th, the robot is not well aligned with the token so we move it on the left or on the right. 
 
 ![Schermata del 2022-11-13 14-47-53](https://user-images.githubusercontent.com/114871147/201525162-10c21c59-6ac7-4bf5-a390-907a34576f94.png)
@@ -85,4 +93,5 @@ When all the tokens are paired, our work is done and we can exit the program.
 
 ![Schermata del 2022-11-13 11-31-23](https://user-images.githubusercontent.com/114871147/201517240-6967ec33-2314-4ffd-8bbe-8885791b11e9.png)
 
-
+# Possible Improvements 
+A possible improvement may be to make the robot follow a certain desired path, for example a clockwise or a counterclockwise tragectory.
