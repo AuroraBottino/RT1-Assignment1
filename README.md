@@ -1,12 +1,8 @@
 # Research-Track-Assignment1
+Professor: Carmine Tommaso Recchiuto
+Student: Aurora Bottino
 
-# Professor
-Carmine Tommaso Recchiuto 
-
-# Student
-Aurora Bottino
-
-#Installing and running 
+# Installing and running 
 The simulator requires a Python 2.7 installation, the pygame library, PyPyBox2D, and PyYAML.
 Once the dependencies are installed, we can simply run the assignment.py script to test out the simulator.
 
