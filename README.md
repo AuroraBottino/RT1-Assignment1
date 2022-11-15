@@ -1,96 +1,88 @@
-Python Robotics Simulator
-================================
+# Research-Track-Assignment1
 
-This is a simple, portable robot simulator developed by [Student Robotics](https://studentrobotics.org).
-Some of the arenas and the exercises have been modified for the Research Track I course
+#Installing and running 
+The simulator requires a Python 2.7 installation, the pygame library, PyPyBox2D, and PyYAML.
+Once the dependencies are installed, we can simply run the assignment.py script to test out the simulator.
 
-Installing and running
-----------------------
+# Robot API
+The API for controlling a simulated robot is designed to be as similar as possible to the SR API.
 
-The simulator requires a Python 2.7 installation, the [pygame](http://pygame.org/) library, [PyPyBox2D](https://pypi.python.org/pypi/pypybox2d/2.1-r331), and [PyYAML](https://pypi.python.org/pypi/PyYAML/).
+# Goal of the assignment
+The goal of the assignment is to write a python node that searches and finds a silver token in the environment and pairs it to a golden one.
 
-Once the dependencies are installed, simply run the `test.py` script to test out the simulator.
+# Elements of the project
+ENVIRONMENT: 
 
-## Exercise
------------------------------
+![Schermata del 2022-11-10 13-05-51](https://user-images.githubusercontent.com/114871147/201389352-cddbfb43-1d49-4c64-aace-fec3763bf4f8.png)
+ 
+ROBOT:
 
-To run one or more scripts in the simulator, use `run.py`, passing it the file names. 
+![robot](https://user-images.githubusercontent.com/114871147/201161427-e545f624-df63-4ebe-b1bf-54d17ba0260e.png)
 
-I am proposing you three exercises, with an increasing level of difficulty.
-The instruction for the three exercises can be found inside the .py files (exercise1.py, exercise2.py, exercise3.py).
 
-When done, you can run the program with:
+SILVER TOKENS:
 
-```bash
-$ python run.py exercise1.py
-```
+![token_silver](https://user-images.githubusercontent.com/114871147/201508169-6866d821-20f9-4c9c-9d73-7a16ea99413a.png)
 
-You have also the solutions of the exercises (folder solutions)
+GOLDEN TOKENS:
 
-```bash
-$ python run.py solutions/exercise1_solution.py
-```
+![token](https://user-images.githubusercontent.com/114871147/201508178-61cd5fcd-727d-46b8-9690-0733a3f06856.png)
 
-Robot API
----------
+# Motors
+The simulated robot has two motors configured for skid steering, connected to a two-output Motor Board. The left motor is connected to output 0 and the right motor to output 1.
 
-The API for controlling a simulated robot is designed to be as similar as possible to the [SR API][sr-api].
+The Motor Board API is identical to that of the SR API, except that motor boards cannot be addressed by serial number. So, to turn on the spot at one quarter of full power, one might write the following:
+![Schermata del 2022-11-11 12-46-59](https://user-images.githubusercontent.com/114871147/201389632-f51a4f36-704a-4e95-a398-2a20b48cf5e6.png)
 
-### Motors ###
+The functions used to activate the motor are drive(speed,time) and turn(speed,time): the first one makes the robot go straight, for a certain time at a certain speed speed, while the second makes it turn, for a certain time and at a certain speed.
+ 
+# The Grabber
+The robot is equipped with a grabber, capable of picking up a token which is in front of the robot and within 0.4 metres of the robot's centre. To pick up a token, we call the R.grab() function. 
+If the R.grab() is successful the robot will move the token, otherwise it means the robot is not close enough, so the program will act properly. To release the token we use the R.release() function.
 
-The simulated robot has two motors configured for skid steering, connected to a two-output [Motor Board](https://studentrobotics.org/docs/kit/motor_board). The left motor is connected to output `0` and the right motor to output `1`.
+# Vision
+To help the robot find tokens and navigate, each token has markers stuck to it, as does each wall. The R.see method returns a list of all the markers the robot can see, as Marker objects. The robot can only see markers which it is facing towards.
 
-The Motor Board API is identical to [that of the SR API](https://studentrobotics.org/docs/programming/sr/motors/), except that motor boards cannot be addressed by serial number. So, to turn on the spot at one quarter of full power, one might write the following:
+Each Marker object has the following attributes:
+![Schermata del 2022-11-11 12-55-52](https://user-images.githubusercontent.com/114871147/201390770-dd9254df-ba9c-4d68-9fe4-5f59ea0817bf.png)
 
-```python
-R.motors[0].m0.power = 25
-R.motors[0].m1.power = -25
-```
 
-### The Grabber ###
+For example, the following code lists all of the markers the robot can see
+![Schermata del 2022-11-11 12-46-54](https://user-images.githubusercontent.com/114871147/201390492-0a9b2aba-3dac-48a5-8e5d-35b53fae42c2.png)
 
-The robot is equipped with a grabber, capable of picking up a token which is in front of the robot and within 0.4 metres of the robot's centre. To pick up a token, call the `R.grab` method:
+ 
+# CODE
+First of all, we settle the thresholds for the control of linear distance and the control for orientation:
 
-```python
-success = R.grab()
-```
+![Schermata del 2022-11-13 07-39-32](https://user-images.githubusercontent.com/114871147/201517619-fc078dfb-9839-4ebc-85b6-cbfbc46524e2.png)
 
-The `R.grab` function returns `True` if a token was successfully picked up, or `False` otherwise. If the robot is already holding a token, it will throw an `AlreadyHoldingSomethingException`.
+Also, we define: the boolean variable for letting the robot know if it has to look for a silver or for a golden token, the instance of the class Robot and the two lists of silver tokens and golden tokens that we will use to control the matching. 
 
-To drop the token, call the `R.release` method.
+![Schermata del 2022-11-13 07-47-34](https://user-images.githubusercontent.com/114871147/201517625-02e23961-daa4-461e-843f-5bac425ee986.png)
 
-Cable-tie flails are not implemented.
+Then, we have to define the functions used to activate the motors, which are, as said before, the function drive(speed, time) and turn(speed,time):
 
-### Vision ###
+![Schermata del 2022-11-11 13-16-06](https://user-images.githubusercontent.com/114871147/201394246-cb6d1928-ace1-4dbd-b393-d2048533c6f9.png)
 
-To help the robot find tokens and navigate, each token has markers stuck to it, as does each wall. The `R.see` method returns a list of all the markers the robot can see, as `Marker` objects. The robot can only see markers which it is facing towards.
+After, we call the functions find_silver_token() and find_golden_token(), to retrieve the distance and the angle between the robot and the closest token:
 
-Each `Marker` object has the following attributes:
+![Schermata del 2022-11-13 07-58-00](https://user-images.githubusercontent.com/114871147/201509884-b485df30-7752-4247-ada5-b372e7c00859.png)
 
-* `info`: a `MarkerInfo` object describing the marker itself. Has the following attributes:
-  * `code`: the numeric code of the marker.
-  * `marker_type`: the type of object the marker is attached to (either `MARKER_TOKEN_GOLD`, `MARKER_TOKEN_SILVER` or `MARKER_ARENA`).
-  * `offset`: offset of the numeric code of the marker from the lowest numbered marker of its type. For example, token number 3 has the code 43, but offset 3.
-  * `size`: the size that the marker would be in the real game, for compatibility with the SR API.
-* `centre`: the location of the marker in polar coordinates, as a `PolarCoord` object. Has the following attributes:
-  * `length`: the distance from the centre of the robot to the object (in metres).
-  * `rot_y`: rotation about the Y axis in degrees.
-* `dist`: an alias for `centre.length`
-* `res`: the value of the `res` parameter of `R.see`, for compatibility with the SR API.
-* `rot_y`: an alias for `centre.rot_y`
-* `timestamp`: the time at which the marker was seen (when `R.see` was called).
+Now, we create the Robot control loop with the fuction 'while' and we start looking for a silver token. 
+If no token is detected, we make the robot turn. If the distance between the robot and the token is less than d_th meters, it means we are close to the token and the robot can grab it, by using the method grab() of the class Robot. If the robot grabs the token,we get the code corresponding to the that silver token, the list_silver_token will be updated, adding the silver token just grabbed, so that this token won't be grabbed by the robot anymore. In order to update the list, Python’s append() function has been used: Python’s append() function inserts a single element into an existing list. Then, we modify the value of the variable silver, so now we will look for the other type of token. Otherwise, the robot should be driven toward the token. Also, if the angle between the robot and the silver token (-1 if no token is detected) is between -a_th<= rot_y <= a_th, the robot is well aligned with the token and we can go forward. Instead, if the angle between the robot and the silver token is rot_y < -a_th or rot_y > a_th, the robot is not well aligned with the token so we move it on the left or on the right.
 
-For example, the following code lists all of the markers the robot can see:
+![Schermata del 2022-11-13 08-47-13](https://user-images.githubusercontent.com/114871147/201511625-1de98767-81ba-489d-8424-76200c92c692.png)
 
-```python
-markers = R.see()
-print "I can see", len(markers), "markers:"
+Then, we look for a golden token that is not already matched with a silver one. If no token is detected, we make the robot turn. If the distance between the robot and the token is less than 1.4 * d_th, it means the robot is close to the golden token not matched yet, so we release the silver token grabbed before with the method release() of the class Robot. If the silver token is released, we get the code corresponding to the that golden token, the list_golden_token will be updated, adding the golden token that is matched with the silver token, so the robot won't consider it anymore. Again, we use the function append() to update our list. Then, we modify the value of the variable silver, so now we will look for the other type of token. If the angle between the robot and the golden token (-1 if no token is detected) is between -a_th<= rot_y <= a_th, the robot is well aligned with the token and we can go forward.
+Instead, if the angle between the robot and the golden token is rot_y < -a_th and rot_y > a_th, the robot is not well aligned with the token so we move it on the left or on the right. 
 
-for m in markers:
-    if m.info.marker_type in (MARKER_TOKEN_GOLD, MARKER_TOKEN_SILVER):
-        print " - Token {0} is {1} metres away".format( m.info.offset, m.dist )
-    elif m.info.marker_type == MARKER_ARENA:
-        print " - Arena marker {0} is {1} metres away".format( m.info.offset, m.dist )
-```
+![Schermata del 2022-11-13 14-47-53](https://user-images.githubusercontent.com/114871147/201525162-10c21c59-6ac7-4bf5-a390-907a34576f94.png)
 
-[sr-api]: https://studentrobotics.org/docs/programming/sr/
+
+When all the tokens are paired, our work is done and we can exit the program. 
+
+# FLOWCHART
+
+![Schermata del 2022-11-13 11-31-23](https://user-images.githubusercontent.com/114871147/201517240-6967ec33-2314-4ffd-8bbe-8885791b11e9.png)
+
+
