@@ -1,5 +1,5 @@
 # Research-Track-Assignment1
-Professor: Carmine Tommaso Recchiuto
+Professor: Carmine Tommaso Recchiuto,
 Student: Aurora Bottino
 
 # Installing and running 
