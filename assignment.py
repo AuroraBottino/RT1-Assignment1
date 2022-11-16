@@ -132,7 +132,7 @@ while 1:
             print("I don't see any token!!")
             turn(10,1)       
 
-        elif dist < 1.4 * d_th: 
+        elif dist < 1.5 * d_th: 
 			print("Reached it!")
 			if R.release():
 				print("Releasing...")
