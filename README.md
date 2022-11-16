@@ -82,7 +82,8 @@ Then, we look for a golden token that is not already matched with a silver one. 
 Then, we modify the value of the variable silver, so now we will look for the other type of token. If the angle between the robot and the golden token (-1 if no token is detected) is between -a_th<= rot_y <= a_th, the robot is well aligned with the token and we can go forward.
 Instead, if the angle between the robot and the golden token is rot_y < -a_th and rot_y > a_th, the robot is not well aligned with the token so we move it on the left or on the right. 
 
-![Schermata del 2022-11-13 07-58-00](https://user-images.githubusercontent.com/114871147/201892610-032bc0bc-02d5-4b39-8e94-78ca4ed646ee.png)
+![Schermata del 2022-11-13 09-35-08](https://user-images.githubusercontent.com/114871147/202132443-1dbeb2e9-0fb1-4372-9859-7ec3de3b9d32.png)
+
 
 
 When all the tokens are paired, our work is done and we can exit the program. 
